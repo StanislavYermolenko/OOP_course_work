@@ -167,9 +167,6 @@ class Application(tk.Frame):
 
         flowering_start = get_text_field(self.flowering_period_start_date)
         flowering_end = get_text_field(self.flowering_period_end_date)
-        # flowering_date_end = datetime(
-        #     2000, flowering_date_end[1], flowering_date_end[0], 0, 0, 0
-        #     )
 
         query_string = """Plant.select() \
             .join(PlantType, on=(PlantType.plant_type_id == Plant.plant_type)) \
@@ -231,9 +228,7 @@ class Application(tk.Frame):
         temp_min = get_text_field(self.temperature_regime_min)
         temp_max = get_text_field(self.temperature_regime_max)
         temp_opt = get_text_field(self.temperature_regime_opt)
-        # except ValueError:
-        #     tkinter.messagebox.showinfo('FYI', '!!!Wrong Data!!!')
-        #     return
+
         volume = get_text_field(self.watering_regime_vol)
         watering_days = get_text_field(self.watering_regime_days)
         watering_number = get_text_field(self.watering_regime_numbers)

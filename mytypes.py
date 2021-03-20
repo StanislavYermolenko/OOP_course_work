@@ -8,11 +8,14 @@ from peewee import *
 
 conn = SqliteDatabase('db.sqlite')
 
+
 class BaseModel(Model):
     def __str__(self):
         return ""
+
     class Meta:
         database = conn
+
 
 class PlantType(BaseModel):
     plant_type_id = AutoField(column_name='Id')
@@ -24,9 +27,11 @@ class PlantType(BaseModel):
     class Meta:
         table_name = 'PlantTypes'
 
+
 class Regime:
     def __str__(self):
         return "Regime"
+
 
 class TemperatureRegime(Regime, BaseModel):
     "Temperature in Celsius"
@@ -43,6 +48,7 @@ class TemperatureRegime(Regime, BaseModel):
     class Meta:
         table_name = 'TemperatureRegimes'
 
+
 class WateringRegime(Regime, BaseModel):
     watering_regime_id = AutoField(column_name='Id')
     volume = DecimalField(column_name='volume')
@@ -53,9 +59,10 @@ class WateringRegime(Regime, BaseModel):
         return super(Regime, self).__str__() + "Watering {}ml {}/{}\n".format(
             self.volume, self.number_of_times_per_days, self.days
         )
-        
+
     class Meta:
         table_name = 'WateringRegimes'
+
 
 class LightRegime(Regime, BaseModel):
     """
@@ -76,6 +83,7 @@ class LightRegime(Regime, BaseModel):
     class Meta:
         table_name = 'LightRegimes'
 
+
 class FloweringPeriod(BaseModel):
     flowering_period_id = AutoField(column_name='Id')
     start_flowering = DateField(column_name='start_date')
@@ -89,9 +97,9 @@ class FloweringPeriod(BaseModel):
             s += "  End Flowering: {}\n".format(str(self.end_flowering)[5:])
         return s
 
-
     class Meta:
         table_name = 'FloweringPeriods'
+
 
 class PlantInfo(BaseModel):
     plant_info_id = AutoField(column_name='Id')
@@ -105,37 +113,33 @@ class PlantInfo(BaseModel):
         if not self.photo_filepath is None:
             s += "PhotoPath: {}\n".format(self.photo_filepath)
         return s
-        
-            
-
-
 
     class Meta:
         table_name = 'PlantFileInfo'
 
+
 class Plant(BaseModel):
     plant_id = AutoField(column_name='Id')
-    name = TextField(column_name='Name', null=True) 
-    plant_type = ForeignKeyField(PlantType, backref='PlantType', null=True) 
+    name = TextField(column_name='Name', null=True)
+    plant_type = ForeignKeyField(PlantType, backref='PlantType', null=True)
     plant_info = ForeignKeyField(PlantInfo, backref='PlantInfo', null=True)
-    temperature_regime = ForeignKeyField(TemperatureRegime, backref='TemperatureRegime', null=True) 
-    watering_regime = ForeignKeyField(WateringRegime, backref='WateringRegime', null=True) 
-    light_regime = ForeignKeyField(LightRegime, backref='LightRegime', null=True) 
+    temperature_regime = ForeignKeyField(TemperatureRegime, backref='TemperatureRegime', null=True)
+    watering_regime = ForeignKeyField(WateringRegime, backref='WateringRegime', null=True)
+    light_regime = ForeignKeyField(LightRegime, backref='LightRegime', null=True)
     flowering_period = ForeignKeyField(FloweringPeriod, backref='FloweringPeriod', null=True)
-
 
     def __str__(self):
         s = ""
-        
+
         def if_not_none_add_str(arg):
             if not arg is None:
                 return str(arg)
-            return "" 
+            return ""
 
         s += if_not_none_add_str(self.plant_type)
-        s += if_not_none_add_str(self.plant_info) 
+        s += if_not_none_add_str(self.plant_info)
         s += if_not_none_add_str(self.temperature_regime)
-        s += if_not_none_add_str(self.watering_regime) 
+        s += if_not_none_add_str(self.watering_regime)
         s += if_not_none_add_str(self.watering_regime)
         s += if_not_none_add_str(self.light_regime)
         s += if_not_none_add_str(self.flowering_period)
